@@ -30,10 +30,10 @@
 
           <div id="controls">
             <div id="control-buttons" class="btn-group">
-              <button type="button" class="btn btn-default">
+              <button type="button" class="btn btn-default" onclick="playVideo()">
                 <span class="fa fa-play" aria-hidden="true"></span>
               </button>
-              <button type="button" class="btn btn-default">
+              <button type="button" class="btn btn-default" onclick="pauseVideo()">
                 <span class="fa fa-pause" aria-hidden="true"></span>
               </button>
             </div>  
@@ -46,6 +46,13 @@
       </div>
 
     </div><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
 
     <script>
       // Load the IFrame Player API code asynchronously.
@@ -61,17 +68,36 @@
         player = new YT.Player('player', {
           height: '480',
           width: '640',
-          videoId: '9QDGiRykVD8'
+          videoId: '9QDGiRykVD8',
+          events: {
+            'onReady': onPlayerReady
+          }
         });
       }
+
+      function onPlayerReady() {
+        setInterval(updateProgressBar, 60);
+      }
+  
+      function playVideo() {
+        player.playVideo();
+      }
+
+      function pauseVideo() {
+        player.pauseVideo();
+      }
+
+      function updateProgressBar() {
+        var squarePosition = 540 * (player.getCurrentTime() / player.getDuration());
+        $("#square").css("left", squarePosition);
+      }
+
+      $('#line').click(function (e){
+        var elm = $(this);
+        var pos = e.pageX - elm.offset().left;
+
+        console.log(pos);
+      });
     </script>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
-    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
