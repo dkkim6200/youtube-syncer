@@ -1,10 +1,35 @@
 body {
   padding-top: 50px;
 }
-.starter-template {
-  padding: 40px 15px;
+
+#yt-syncer {
+  margin: auto;
   text-align: center;
+  width: 640px;
 }
-#headshot {
-    width: 500px;
+
+#control-buttons {
+  float: left;
+}
+
+#progress-bar {
+  float: left;
+  margin-left: 10px;
+}
+
+#line {
+  width: 540px;
+  background-color: black;
+  height: 3px;
+  position: absolute;
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+#square {
+  width: 20px;
+  height: 20px;
+  border: 3px solid black;
+  position: absolute;
+  margin-top: 7px;
 }
