@@ -91,12 +91,17 @@
       }
 
       function onPlayerStateChange(event) {
+        console.log(event.data);
+
         if (event.data == 5) {
-          socket.emit('buffer ended');
+          socket.emit('video cued');
         }
       }
 
       $(() => {
+        const MAC_DELAY = 460;
+        const IOS_DELAY = 0;
+
         $('#line').click(function (e){
           var elm = $(this);
           var pos = e.pageX - elm.offset().left;
@@ -112,15 +117,26 @@
 
         socket.on('play', () => {
           var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+          var isIOS = /(iPhone|iPod|iPad)/i.test(navigator.platform);
+          
           if (isMac) {
-            setTimeout(player.playVideo, 300);
-          else {
-            player.playVideo();
+            setTimeout(() => { player.playVideo(); }, MAC_DELAY);
+          }
+          else if (isIOS) {
+            setTimeout(() => { player.playVideo(); }, IOS_DELAY);
           }
         });
 
-        socket.on('pause', () => {       
-          player.pauseVideo();
+        socket.on('pause', () => {
+          var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+          var isIOS = /(iPhone|iPod|iPad)/i.test(navigator.platform);
+
+          if (isMac) {
+            setTimeout(() => { player.pauseVideo(); }, MAC_DELAY);
+          }
+          else if (isIOS) {
+            setTimeout(() => { player.pauseVideo(); }, IOS_DELAY);
+          }
         });
         
       });
