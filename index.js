@@ -12,12 +12,22 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('index'));
 // app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
+var numUsers = 0;
+var numBufferedUsers = 0;
+
 io.on('connection', (socket) => {
   console.log('a user connected');
+  numUsers++;
   
   socket.on('disconnect', () => {
+    numUsers--;
     console.log('user disconnected');
   });
+
+  socket.on('ping req', () => {
+    console.log('incoming ping');
+    socket.emit('pong res');
+  }); 
 
   socket.on('move to', (seconds) => {
     console.log(`move to ${ seconds } seconds`);
@@ -29,9 +39,9 @@ io.on('connection', (socket) => {
     io.emit('play');
   });
 
-  socket.on('pause', () => {
-    console.log('pause');
-    io.emit('pause');
+  socket.on('pause', (seconds) => {
+    console.log(`pause at ${seconds} seconds`);
+    io.emit('pause', seconds);
   });
 
   socket.on('video cued', () => {
