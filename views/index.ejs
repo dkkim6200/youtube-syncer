@@ -179,7 +179,7 @@
         });
 
         socket.on('play', () => {
-          //player.seekTo(player.getCurrentTime() + latency / 2.0 / 1000.0);
+          player.seekTo(player.getCurrentTime() + latency / 2.0 / 1000.0);
           playVideo();
         });
 
