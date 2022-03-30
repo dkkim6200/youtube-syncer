@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <link rel="icon" href="../../favicon.ico">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="../../favicon.ico" />
 
-      <title>Daekun's Starter Template for NodeJs Web App</title>
+    <title>Daekun's Starter Template for NodeJs Web App</title>
 
-      <!-- Bootstrap core CSS -->
-      <link href="css/bootstrap.min.css" rel="stylesheet">
-      
-      <!-- Font Awesome -->
-      <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
 
-      <!-- Custom styles for this template -->
-      <link href="css/main.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" />
+
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -30,13 +30,21 @@
 
           <div id="controls">
             <div id="control-buttons" class="btn-group">
-              <button type="button" class="btn btn-default" onclick="socket.emit('play')">
+              <button
+                type="button"
+                class="btn btn-default"
+                onclick="socket.emit('play')"
+              >
                 <span class="fa fa-play" aria-hidden="true"></span>
               </button>
-              <button type="button" class="btn btn-default" onclick="socket.emit('pause', player.getCurrentTime())">
+              <button
+                type="button"
+                class="btn btn-default"
+                onclick="socket.emit('pause', player.getCurrentTime())"
+              >
                 <span class="fa fa-pause" aria-hidden="true"></span>
               </button>
-            </div>  
+            </div>
             <div id="progress-bar">
               <div id="line"></div>
               <div id="square"></div>
@@ -44,14 +52,17 @@
           </div>
         </div>
       </div>
-
-    </div><!-- /.container -->
+    </div>
+    <!-- /.container -->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script>
+      window.jQuery ||
+        document.write('<script src="js/jquery.min.js"><\/script>');
+    </script>
     <script src="js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
@@ -62,9 +73,9 @@
       var socket = io();
 
       // Load the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
+      var tag = document.createElement("script");
       tag.src = "https://www.youtube.com/player_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
+      var firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
       // Replace the 'ytplayer' element with an <iframe> and
@@ -73,15 +84,15 @@
       function onYouTubePlayerAPIReady() {
         console.log("Player loading");
 
-        player = new YT.Player('player', {
-          height: '480',
-          width: '640',
-          videoId: 'ytZsndEc830',
-          playerVars: { 'controls': 0, 'modestbranding': 1, 'showinfo': 0 },
+        player = new YT.Player("player", {
+          height: "480",
+          width: "640",
+          videoId: "nQobOSv2kzM",
+          playerVars: { controls: 0, modestbranding: 1, showinfo: 0 },
           events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
         });
       }
 
@@ -91,7 +102,8 @@
       }
 
       function updateProgressBar() {
-        var squarePosition = 540 * (player.getCurrentTime() / player.getDuration());
+        var squarePosition =
+          540 * (player.getCurrentTime() / player.getDuration());
         $("#square").css("left", squarePosition);
       }
 
@@ -99,13 +111,16 @@
         console.log(event.data);
 
         if (event.data == 5) {
-          socket.emit('video cued');
+          socket.emit("video cued");
         }
       }
 
       function displayLoadedTime() {
-        var minutes = Math.trunc(player.getVideoLoadedFraction() * player.getDuration() / 60);
-        var seconds = player.getVideoLoadedFraction() * player.getDuration() % 60;
+        var minutes = Math.trunc(
+          (player.getVideoLoadedFraction() * player.getDuration()) / 60
+        );
+        var seconds =
+          (player.getVideoLoadedFraction() * player.getDuration()) % 60;
         console.log(`${minutes}:${seconds}`);
       }
 
@@ -141,11 +156,15 @@
 
       function checkBuffered() {
         displayLoadedTime();
-        if (player.getVideoLoadedFraction() * player.getDuration() > player.getCurrentTime()) {
-          socket.emit('buffered');
-        }
-        else {
-          setTimeout(() => { checkBuffered(); }, 100);
+        if (
+          player.getVideoLoadedFraction() * player.getDuration() >
+          player.getCurrentTime()
+        ) {
+          socket.emit("buffered");
+        } else {
+          setTimeout(() => {
+            checkBuffered();
+          }, 100);
         }
       }
 
@@ -154,36 +173,35 @@
 
       $(() => {
         setInterval(() => {
-          console.log('ping');
+          console.log("ping");
           startTime = Date.now();
-          socket.emit('ping req');
+          socket.emit("ping req");
         }, 2000);
 
-        
-        $('#line').click(function (e){
+        $("#line").click(function (e) {
           var elm = $(this);
           var pos = e.pageX - elm.offset().left;
-          var seconds = player.getDuration() * pos / 540.0;
-          
-          socket.emit('move to', seconds);
+          var seconds = (player.getDuration() * pos) / 540.0;
+
+          socket.emit("move to", seconds);
         });
 
-        socket.on('pong res', () => {
+        socket.on("pong res", () => {
           latency = Date.now() - startTime;
-          console.log(`Ping: ${ latency }`);
+          console.log(`Ping: ${latency}`);
         });
 
-        socket.on('move to', (seconds) => {
+        socket.on("move to", (seconds) => {
           player.seekTo(seconds);
           player.pauseVideo();
         });
 
-        socket.on('play', () => {
+        socket.on("play", () => {
           player.seekTo(player.getCurrentTime() + latency / 2.0 / 1000.0);
           playVideo();
         });
 
-        socket.on('pause', (seconds) => {
+        socket.on("pause", (seconds) => {
           player.seekTo(seconds);
           pauseVideo();
         });
